@@ -18,13 +18,15 @@ def get_page(url):
 
 def parse_detail(soup):
     detail_mode = soup.find(id="details-module", class_="module toggle-wrap")
-
+    if(detail_mode==None): return None,""
     mode_name = detail_mode.h4.string
     value_dicts = detail_mode.select("li")
     dict = {}
     for value in value_dicts:
         type_ = value.find(class_="name").string
+        if (type_ == None): continue
         name_ = value.find(class_="value").text
+        if (name_==None): continue
         name_ = "".join(name_.strip().split())
         dict[type_] = name_
     return mode_name, dict
@@ -32,7 +34,7 @@ def parse_detail(soup):
 
 def parse_description(soup):
     description_mode = soup.find(id="descriptionmodule", class_="module toggle-wrap")
-
+    if(description_mode==None):return None,""
     mode_name = description_mode.h4.string
     String = ""
     user_content = description_mode.find(class_="user-content-block")
@@ -122,25 +124,34 @@ def parse_comment():
 
 
 def main():
-    url = "https://issues.apache.org/jira/browse/CAMEL-10597"
-    html = get_page(url)
-    soup = BeautifulSoup(html, "lxml")
-    detail_mode, detail_dict = parse_detail(soup)
-    description_mode, description_string = parse_description(soup)
-    people_mode, people_dict = parse_people(soup)
-    date_mode, date_dict = parse_date(soup)
-    comment_mode, comment_string = parse_comment()
-
-    with open("data.csv", "w") as f:
-        writer = csv.writer(f, delimiter=",")
-        for name, value in detail_dict.items():
-            writer.writerow([name, value])
-        writer.writerow(['description', description_string])
-        for name, value in people_dict.items():
-            writer.writerow([name, value])
-        for name, value in date_dict.items():
-            writer.writerow([name, value])
-        writer.writerow(["comments", comment_string])
+    urls = ["https://issues.apache.org/jira/browse/CAMEL-10597","https://issues.apache.org/jira/browse/CAMEL-14381",
+            "https://issues.apache.org/jira/browse/CAMEL-13830","https://issues.apache.org/jira/browse/CAMEL-14520",
+            "https://issues.apache.org/jira/browse/CAMEL-14519","https://issues.apache.org/jira/browse/CAMEL-14407",
+            "https://issues.apache.org/jira/browse/CAMEL-13780","https://issues.apache.org/jira/browse/CAMEL-14020",
+            "https://issues.apache.org/jira/browse/CAMEL-14319","https://issues.apache.org/jira/browse/CAMEL-9324",
+            "https://issues.apache.org/jira/browse/CAMEL-14322","https://issues.apache.org/jira/browse/CAMEL-13940",
+            "https://issues.apache.org/jira/browse/CAMEL-14283","https://issues.apache.org/jira/browse/CAMEL-13535",
+            "https://issues.apache.org/jira/browse/CAMEL-14003","https://issues.apache.org/jira/browse/CAMEL-4992",
+            "https://issues.apache.org/jira/browse/CAMEL-14189","https://issues.apache.org/jira/browse/CAMEL-14104",
+            "https://issues.apache.org/jira/browse/CAMEL-13501","https://issues.apache.org/jira/browse/CAMEL-14305"]
+    for url in urls:
+        html = get_page(url)
+        soup = BeautifulSoup(html, "lxml")
+        detail_mode, detail_dict = parse_detail(soup)
+        description_mode, description_string = parse_description(soup)
+        people_mode, people_dict = parse_people(soup)
+        date_mode, date_dict = parse_date(soup)
+        comment_mode, comment_string = parse_comment()
+        with open("data.csv", "a",encoding="utf-8") as f:
+            writer = csv.writer(f, delimiter=",")
+            for name, value in detail_dict.items():
+                writer.writerow([name, value])
+            writer.writerow(['description', description_string])
+            for name, value in people_dict.items():
+                writer.writerow([name, value])
+            for name, value in date_dict.items():
+                writer.writerow([name, value])
+            writer.writerow(["comments", comment_string])
 
 
 

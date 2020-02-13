@@ -1,0 +1,1868 @@
+Type:,Bug
+,
+Status:,Resolved
+,
+Priority:,Minor
+,
+Resolution:,Fixed
+,
+Affects Version/s:,2.18.0
+,
+Fix Version/s:,"2.17.5,2.18.2,2.19.0"
+,
+Component/s:,camel-swagger
+,
+Labels:,None
+,
+Patch Info:,PatchAvailable
+,
+Estimated Complexity:,Unknown
+,
+description,"Assume I have rest pathrest(""/test"").get().type(ClassA.class).to(""direct:someRoute"");
+
+rest(""/testSub"").get().type(ClassB.class).to(""direct:someOtherRoute"");
+And in the type ClassA contains a reference to ClassB.Within the Swagger Doc the path for ClassA renders as expected:/test:
+    get:
+      responses:
+        200:
+          schema:
+            $ref: '#/definitions/ClassA'
+However ClassB gets a string parameter scheme 
+/testSub:
+    get:
+      responses:
+        200:
+          schema:
+             type : 'string'
+             format : 'com.ClassB'
+However I'd expect it to be:/testSub:
+    get:
+      responses:
+        200:
+          schema:
+            $ref: '#/definitions/ClassB'
+"
+,
+Assignee:,ClausIbsen
+,
+Reporter:,BobPaulin
+,
+Votes:,0Voteforthisissue
+,
+Watchers:,4Startwatchingthisissue
+,
+Created:,14/Dec/1614:42
+,
+Updated:,15/Dec/1614:26
+,
+Resolved:,14/Dec/1615:31
+,
+comments,"
+Hide
+
+
+Permalink
+
+
+ ASF GitHub Bot
+ added a comment  - 14/Dec/16 14:55 
+GitHub user bobpaulin opened a pull request:
+ https://github.com/apache/camel/pull/1348
+ CAMEL-10597 - Allow addition of x-className to empty VendorExtensions
+You can merge this pull request into a Git repository by running:
+    $ git pull https://github.com/bobpaulin/camel CAMEL-10597
+Alternatively you can review and apply these changes as the patch at:
+ https://github.com/apache/camel/pull/1348.patch
+To close this pull request, make a commit to your master/trunk branch
+with (at least) the following in the commit message:
+    This closes #1348
+
+ 
+Hide
+
+
+Permalink
+
+
+ Bob Paulin
+ added a comment  - 14/Dec/16 14:56 
+PR included https://github.com/apache/camel/pull/1348 
+Hide
+
+
+Permalink
+
+
+ Claus Ibsen
+ added a comment  - 14/Dec/16 15:31 
+Thanks for the PR 
+Hide
+
+
+Permalink
+
+
+ ASF GitHub Bot
+ added a comment  - 14/Dec/16 15:34 
+Github user bobpaulin closed the pull request at:
+ https://github.com/apache/camel/pull/1348 
+Hide
+
+
+Permalink
+
+
+ Andrea Cosentino
+ added a comment  - 15/Dec/16 14:05 
+2.17.x is affected too Claus Ibsen 
+Hide
+
+
+Permalink
+
+
+ Claus Ibsen
+ added a comment  - 15/Dec/16 14:26 
+Thanks its backported now "
+,
+Type:,Improvement
+,
+Status:,Open
+,
+Priority:,Major
+,
+Resolution:,Unresolved
+,
+Affects Version/s:,None
+,
+Fix Version/s:,3.2.0
+,
+Component/s:,None
+,
+Labels:,None
+,
+Estimated Complexity:,Unknown
+,
+description,"We should create a mutiny component, similar to camel-reactive-streams 
+https://github.com/smallrye/smallrye-mutiny
+CamelMutiny.on(context)
+    .toMulti(servicenow().table(""incident"").max(100))
+    .then(m -> doSomething(m))
+    .await().indefinitely();
+In Quarkus, we can nicely integrate camel into reactive messaging, like:
+@Inject
+CamelMutiny mutiny;
+
+@Outgoing
+Multi<Whatever> fromEndpoint() {
+    return mutiny.toMulti(servicenow().table(""incident"").max(100));
+}
+@Outgoing
+Multi<Whatever> fromEndpointURI() {
+    return mutiny.toMulti(""servicenow?table=incident"");
+}
+
+@Incoming
+void toEndpoint(Multi<Item> items) {
+    return mutiny.subscribeTo(items)
+        .with(servicenow().table(""incident"").max(100).async());
+}
+@Incoming
+void toEndpointURI(Multi<Item> items) {
+    return mutiny.subscribeTo(items)
+        .with(s""servicenow?table=incident"");
+}
+"
+,
+Assignee:,NicolaFerraro
+,
+Reporter:,LucaBurgazzoli
+,
+Votes:,0Voteforthisissue
+,
+Watchers:,2Startwatchingthisissue
+,
+Created:,09/Jan/2013:27
+,
+Updated:,3daysago13:22
+,
+comments,"
+Hide
+
+
+Permalink
+
+
+ ASF GitHub Bot
+ added a comment  - 14/Dec/16 14:55 
+GitHub user bobpaulin opened a pull request:
+ https://github.com/apache/camel/pull/1348
+ CAMEL-10597 - Allow addition of x-className to empty VendorExtensions
+You can merge this pull request into a Git repository by running:
+    $ git pull https://github.com/bobpaulin/camel CAMEL-10597
+Alternatively you can review and apply these changes as the patch at:
+ https://github.com/apache/camel/pull/1348.patch
+To close this pull request, make a commit to your master/trunk branch
+with (at least) the following in the commit message:
+    This closes #1348
+
+ 
+Hide
+
+
+Permalink
+
+
+ Bob Paulin
+ added a comment  - 14/Dec/16 14:56 
+PR included https://github.com/apache/camel/pull/1348 
+Hide
+
+
+Permalink
+
+
+ Claus Ibsen
+ added a comment  - 14/Dec/16 15:31 
+Thanks for the PR 
+Hide
+
+
+Permalink
+
+
+ ASF GitHub Bot
+ added a comment  - 14/Dec/16 15:34 
+Github user bobpaulin closed the pull request at:
+ https://github.com/apache/camel/pull/1348 
+Hide
+
+
+Permalink
+
+
+ Andrea Cosentino
+ added a comment  - 15/Dec/16 14:05 
+2.17.x is affected too Claus Ibsen 
+Hide
+
+
+Permalink
+
+
+ Claus Ibsen
+ added a comment  - 15/Dec/16 14:26 
+Thanks its backported now "
+,
+Type:,Improvement
+,
+Status:,Open
+,
+Priority:,Major
+,
+Resolution:,Unresolved
+,
+Affects Version/s:,None
+,
+Fix Version/s:,3.1.0
+,
+Component/s:,examples
+,
+Labels:,None
+,
+Estimated Complexity:,Unknown
+,
+description,"I think it may be quicker and easier for new users to try our examples if we put them in a separate repo, so there is less source code. The git repo for Camel is very big, and it takes a longer time to checkout, and users may get lost in the source code.If we have a camel-examples git repo with just examples we can refer people to this."
+,
+Assignee:,OmarAl-Safi
+,
+Reporter:,ClausIbsen
+,
+Votes:,1Voteforthisissue
+,
+Watchers:,3Startwatchingthisissue
+,
+Created:,07/Aug/1907:29
+,
+Updated:,2daysago13:55
+,
+comments,"
+Hide
+
+
+Permalink
+
+
+ ASF GitHub Bot
+ added a comment  - 14/Dec/16 14:55 
+GitHub user bobpaulin opened a pull request:
+ https://github.com/apache/camel/pull/1348
+ CAMEL-10597 - Allow addition of x-className to empty VendorExtensions
+You can merge this pull request into a Git repository by running:
+    $ git pull https://github.com/bobpaulin/camel CAMEL-10597
+Alternatively you can review and apply these changes as the patch at:
+ https://github.com/apache/camel/pull/1348.patch
+To close this pull request, make a commit to your master/trunk branch
+with (at least) the following in the commit message:
+    This closes #1348
+
+ 
+Hide
+
+
+Permalink
+
+
+ Bob Paulin
+ added a comment  - 14/Dec/16 14:56 
+PR included https://github.com/apache/camel/pull/1348 
+Hide
+
+
+Permalink
+
+
+ Claus Ibsen
+ added a comment  - 14/Dec/16 15:31 
+Thanks for the PR 
+Hide
+
+
+Permalink
+
+
+ ASF GitHub Bot
+ added a comment  - 14/Dec/16 15:34 
+Github user bobpaulin closed the pull request at:
+ https://github.com/apache/camel/pull/1348 
+Hide
+
+
+Permalink
+
+
+ Andrea Cosentino
+ added a comment  - 15/Dec/16 14:05 
+2.17.x is affected too Claus Ibsen 
+Hide
+
+
+Permalink
+
+
+ Claus Ibsen
+ added a comment  - 15/Dec/16 14:26 
+Thanks its backported now "
+,
+Type:,Sub-task
+,
+Status:,Open
+,
+Priority:,Major
+,
+Resolution:,Unresolved
+,
+Affects Version/s:,None
+,
+Fix Version/s:,3.1.0
+,
+Component/s:,camel-aws
+,
+Labels:,None
+,
+Estimated Complexity:,Unknown
+,
+description,
+,
+Assignee:,AndreaCosentino
+,
+Reporter:,AndreaCosentino
+,
+Votes:,0Voteforthisissue
+,
+Watchers:,1Startwatchingthisissue
+,
+Created:,6daysago12:58
+,
+Updated:,6daysago12:59
+,
+comments,"
+Hide
+
+
+Permalink
+
+
+ ASF GitHub Bot
+ added a comment  - 14/Dec/16 14:55 
+GitHub user bobpaulin opened a pull request:
+ https://github.com/apache/camel/pull/1348
+ CAMEL-10597 - Allow addition of x-className to empty VendorExtensions
+You can merge this pull request into a Git repository by running:
+    $ git pull https://github.com/bobpaulin/camel CAMEL-10597
+Alternatively you can review and apply these changes as the patch at:
+ https://github.com/apache/camel/pull/1348.patch
+To close this pull request, make a commit to your master/trunk branch
+with (at least) the following in the commit message:
+    This closes #1348
+
+ 
+Hide
+
+
+Permalink
+
+
+ Bob Paulin
+ added a comment  - 14/Dec/16 14:56 
+PR included https://github.com/apache/camel/pull/1348 
+Hide
+
+
+Permalink
+
+
+ Claus Ibsen
+ added a comment  - 14/Dec/16 15:31 
+Thanks for the PR 
+Hide
+
+
+Permalink
+
+
+ ASF GitHub Bot
+ added a comment  - 14/Dec/16 15:34 
+Github user bobpaulin closed the pull request at:
+ https://github.com/apache/camel/pull/1348 
+Hide
+
+
+Permalink
+
+
+ Andrea Cosentino
+ added a comment  - 15/Dec/16 14:05 
+2.17.x is affected too Claus Ibsen 
+Hide
+
+
+Permalink
+
+
+ Claus Ibsen
+ added a comment  - 15/Dec/16 14:26 
+Thanks its backported now "
+,
+Type:,Sub-task
+,
+Status:,Resolved
+,
+Priority:,Major
+,
+Resolution:,Fixed
+,
+Affects Version/s:,None
+,
+Fix Version/s:,3.1.0
+,
+Component/s:,camel-aws
+,
+Labels:,None
+,
+Estimated Complexity:,Unknown
+,
+description,
+,
+Assignee:,AndreaCosentino
+,
+Reporter:,AndreaCosentino
+,
+Votes:,0Voteforthisissue
+,
+Watchers:,1Startwatchingthisissue
+,
+Created:,6daysago12:57
+,
+Updated:,2daysago10:02
+,
+Resolved:,2daysago10:02
+,
+comments,"
+Hide
+
+
+Permalink
+
+
+ ASF GitHub Bot
+ added a comment  - 14/Dec/16 14:55 
+GitHub user bobpaulin opened a pull request:
+ https://github.com/apache/camel/pull/1348
+ CAMEL-10597 - Allow addition of x-className to empty VendorExtensions
+You can merge this pull request into a Git repository by running:
+    $ git pull https://github.com/bobpaulin/camel CAMEL-10597
+Alternatively you can review and apply these changes as the patch at:
+ https://github.com/apache/camel/pull/1348.patch
+To close this pull request, make a commit to your master/trunk branch
+with (at least) the following in the commit message:
+    This closes #1348
+
+ 
+Hide
+
+
+Permalink
+
+
+ Bob Paulin
+ added a comment  - 14/Dec/16 14:56 
+PR included https://github.com/apache/camel/pull/1348 
+Hide
+
+
+Permalink
+
+
+ Claus Ibsen
+ added a comment  - 14/Dec/16 15:31 
+Thanks for the PR 
+Hide
+
+
+Permalink
+
+
+ ASF GitHub Bot
+ added a comment  - 14/Dec/16 15:34 
+Github user bobpaulin closed the pull request at:
+ https://github.com/apache/camel/pull/1348 
+Hide
+
+
+Permalink
+
+
+ Andrea Cosentino
+ added a comment  - 15/Dec/16 14:05 
+2.17.x is affected too Claus Ibsen 
+Hide
+
+
+Permalink
+
+
+ Claus Ibsen
+ added a comment  - 15/Dec/16 14:26 
+Thanks its backported now "
+,
+Type:,Improvement
+,
+Status:,Open
+,
+Priority:,Major
+,
+Resolution:,Unresolved
+,
+Affects Version/s:,2.24.2
+,
+Fix Version/s:,3.2.0
+,
+Component/s:,camel-rabbitmq
+,
+Labels:,None
+,
+Estimated Complexity:,Unknown
+,
+description,"What do you think about adding a consumerTag to the Camel RabbitMQ endpoint ?The consumerTag allows you to specify a client-generated consumer tag to establish context when invoking channel.basicConsume(). This function is useful from an operational point of view to specialize the names of consumers in the RabbitMQ management console. See attachments.
+String basicConsume(String queue, boolean autoAck, String consumerTag, boolean noLocal, boolean exclusive, Map<String, Object> arguments, Consumer callback) throws IOException;The evolution to realize is simple.1/ Add the consumerTag in the RabbitMQEndpoint class:
+@UriParam (label = ""consumer"")
+private String consumerTag = """";2/ Use the consumerTag in the RabbitConsumer class:
+@Override
+protected void doStart () throws Exception {
+   if (channel == null) {
+      throw new IOException (""The RabbitMQ channel is not open"");
+   }
+   tag = channel.basicConsume (consumer.getEndpoint(). getQueue(), consumer.getEndpoint().isAutoAck(), consumer.getEndpoint().getConsumerTag(), false, consumer.getEndpoint().isExclusiveConsumer(), null, this);
+ }NB : This functionnality exists on Spring AMQP through the org.springframework.amqp.support.ConsumerTagStrategy interface."
+,
+Assignee:,AndreaCosentino
+,
+Reporter:,ArnaudChotard
+,
+Votes:,0Voteforthisissue
+,
+Watchers:,2Startwatchingthisissue
+,
+Created:,15/Jan/2015:31
+,
+Updated:,Yesterday09:51
+,
+comments,"
+Hide
+
+
+Permalink
+
+
+ ASF GitHub Bot
+ added a comment  - 14/Dec/16 14:55 
+GitHub user bobpaulin opened a pull request:
+ https://github.com/apache/camel/pull/1348
+ CAMEL-10597 - Allow addition of x-className to empty VendorExtensions
+You can merge this pull request into a Git repository by running:
+    $ git pull https://github.com/bobpaulin/camel CAMEL-10597
+Alternatively you can review and apply these changes as the patch at:
+ https://github.com/apache/camel/pull/1348.patch
+To close this pull request, make a commit to your master/trunk branch
+with (at least) the following in the commit message:
+    This closes #1348
+
+ 
+Hide
+
+
+Permalink
+
+
+ Bob Paulin
+ added a comment  - 14/Dec/16 14:56 
+PR included https://github.com/apache/camel/pull/1348 
+Hide
+
+
+Permalink
+
+
+ Claus Ibsen
+ added a comment  - 14/Dec/16 15:31 
+Thanks for the PR 
+Hide
+
+
+Permalink
+
+
+ ASF GitHub Bot
+ added a comment  - 14/Dec/16 15:34 
+Github user bobpaulin closed the pull request at:
+ https://github.com/apache/camel/pull/1348 
+Hide
+
+
+Permalink
+
+
+ Andrea Cosentino
+ added a comment  - 15/Dec/16 14:05 
+2.17.x is affected too Claus Ibsen 
+Hide
+
+
+Permalink
+
+
+ Claus Ibsen
+ added a comment  - 15/Dec/16 14:26 
+Thanks its backported now "
+Type:,Task
+,
+Status:,Open
+,
+Priority:,Major
+,
+Resolution:,Unresolved
+,
+Affects Version/s:,None
+,
+Fix Version/s:,3.x
+,
+Component/s:,tests
+,
+Labels:,None
+,
+Environment:,WhenyoucompileacomponentthendeprecatedWARNsisloggedbythecompiler.ThegetOutonMessageshouldbeusinggetMessageinthetests.
+,
+Estimated Complexity:,Novice
+,
+description,
+,
+Assignee:,Unassigned
+,
+Reporter:,ClausIbsen
+,
+Votes:,0Voteforthisissue
+,
+Watchers:,4Startwatchingthisissue
+,
+Created:,30/Sep/1905:34
+,
+Updated:,22/Jan/2022:03
+,
+comments,"
+Hide
+
+
+Permalink
+
+
+ ASF GitHub Bot
+ added a comment  - 14/Dec/16 14:55 
+GitHub user bobpaulin opened a pull request:
+ https://github.com/apache/camel/pull/1348
+ CAMEL-10597 - Allow addition of x-className to empty VendorExtensions
+You can merge this pull request into a Git repository by running:
+    $ git pull https://github.com/bobpaulin/camel CAMEL-10597
+Alternatively you can review and apply these changes as the patch at:
+ https://github.com/apache/camel/pull/1348.patch
+To close this pull request, make a commit to your master/trunk branch
+with (at least) the following in the commit message:
+    This closes #1348
+
+ 
+Hide
+
+
+Permalink
+
+
+ Bob Paulin
+ added a comment  - 14/Dec/16 14:56 
+PR included https://github.com/apache/camel/pull/1348 
+Hide
+
+
+Permalink
+
+
+ Claus Ibsen
+ added a comment  - 14/Dec/16 15:31 
+Thanks for the PR 
+Hide
+
+
+Permalink
+
+
+ ASF GitHub Bot
+ added a comment  - 14/Dec/16 15:34 
+Github user bobpaulin closed the pull request at:
+ https://github.com/apache/camel/pull/1348 
+Hide
+
+
+Permalink
+
+
+ Andrea Cosentino
+ added a comment  - 15/Dec/16 14:05 
+2.17.x is affected too Claus Ibsen 
+Hide
+
+
+Permalink
+
+
+ Claus Ibsen
+ added a comment  - 15/Dec/16 14:26 
+Thanks its backported now "
+Type:,Task
+,
+Status:,Open
+,
+Priority:,Major
+,
+Resolution:,Unresolved
+,
+Affects Version/s:,None
+,
+Fix Version/s:,Future
+,
+Component/s:,None
+,
+Labels:,None
+,
+Estimated Complexity:,Unknown
+,
+description,Actually it is using a really old version 1.4.x
+,
+Assignee:,Unassigned
+,
+Reporter:,AndreaCosentino
+,
+Votes:,0Voteforthisissue
+,
+Watchers:,2Startwatchingthisissue
+,
+Created:,19/Dec/1917:38
+,
+Updated:,03/Jan/2012:34
+,
+comments,"
+Hide
+
+
+Permalink
+
+
+ ASF GitHub Bot
+ added a comment  - 14/Dec/16 14:55 
+GitHub user bobpaulin opened a pull request:
+ https://github.com/apache/camel/pull/1348
+ CAMEL-10597 - Allow addition of x-className to empty VendorExtensions
+You can merge this pull request into a Git repository by running:
+    $ git pull https://github.com/bobpaulin/camel CAMEL-10597
+Alternatively you can review and apply these changes as the patch at:
+ https://github.com/apache/camel/pull/1348.patch
+To close this pull request, make a commit to your master/trunk branch
+with (at least) the following in the commit message:
+    This closes #1348
+
+ 
+Hide
+
+
+Permalink
+
+
+ Bob Paulin
+ added a comment  - 14/Dec/16 14:56 
+PR included https://github.com/apache/camel/pull/1348 
+Hide
+
+
+Permalink
+
+
+ Claus Ibsen
+ added a comment  - 14/Dec/16 15:31 
+Thanks for the PR 
+Hide
+
+
+Permalink
+
+
+ ASF GitHub Bot
+ added a comment  - 14/Dec/16 15:34 
+Github user bobpaulin closed the pull request at:
+ https://github.com/apache/camel/pull/1348 
+Hide
+
+
+Permalink
+
+
+ Andrea Cosentino
+ added a comment  - 15/Dec/16 14:05 
+2.17.x is affected too Claus Ibsen 
+Hide
+
+
+Permalink
+
+
+ Claus Ibsen
+ added a comment  - 15/Dec/16 14:26 
+Thanks its backported now "
+Type:,Improvement
+,
+Status:,Open
+,
+Priority:,Major
+,
+Resolution:,Unresolved
+,
+Affects Version/s:,None
+,
+Fix Version/s:,Future
+,
+Component/s:,"camel-core,camel-ftp"
+,
+Labels:,None
+,
+Estimated Complexity:,Unknown
+,
+description,"See nabble
+http://camel.465427.n5.nabble.com/sftp-endpoint-is-not-as-performant-as-expected-tp5773654p5773879.htmlYeah the current changed read-lock afair don't keep state between
+polls. So we could look into one that does that, and do a full scan of
+all the files, and then do a change detect on all files all together
+and make up which ones hasn't changed. And that way can react faster
+than currently.Now that may require doing more file directory listings to gather all
+those files and their timestamps / size to see which one has changed,
+instead of monitoring a single file one by one. Also it may mean that
+files can be processed out of order, if a file sort isn't must be
+strictly followed."
+,
+Assignee:,Unassigned
+,
+Reporter:,ClausIbsen
+,
+Votes:,2Voteforthisissue
+,
+Watchers:,4Startwatchingthisissue
+,
+Created:,14/Nov/1510:42
+,
+Updated:,02/Jan/2008:53
+,
+comments,"
+Hide
+
+
+Permalink
+
+
+ ASF GitHub Bot
+ added a comment  - 14/Dec/16 14:55 
+GitHub user bobpaulin opened a pull request:
+ https://github.com/apache/camel/pull/1348
+ CAMEL-10597 - Allow addition of x-className to empty VendorExtensions
+You can merge this pull request into a Git repository by running:
+    $ git pull https://github.com/bobpaulin/camel CAMEL-10597
+Alternatively you can review and apply these changes as the patch at:
+ https://github.com/apache/camel/pull/1348.patch
+To close this pull request, make a commit to your master/trunk branch
+with (at least) the following in the commit message:
+    This closes #1348
+
+ 
+Hide
+
+
+Permalink
+
+
+ Bob Paulin
+ added a comment  - 14/Dec/16 14:56 
+PR included https://github.com/apache/camel/pull/1348 
+Hide
+
+
+Permalink
+
+
+ Claus Ibsen
+ added a comment  - 14/Dec/16 15:31 
+Thanks for the PR 
+Hide
+
+
+Permalink
+
+
+ ASF GitHub Bot
+ added a comment  - 14/Dec/16 15:34 
+Github user bobpaulin closed the pull request at:
+ https://github.com/apache/camel/pull/1348 
+Hide
+
+
+Permalink
+
+
+ Andrea Cosentino
+ added a comment  - 15/Dec/16 14:05 
+2.17.x is affected too Claus Ibsen 
+Hide
+
+
+Permalink
+
+
+ Claus Ibsen
+ added a comment  - 15/Dec/16 14:26 
+Thanks its backported now "
+Type:,Improvement
+,
+Status:,Open
+,
+Priority:,Major
+,
+Resolution:,Unresolved
+,
+Affects Version/s:,None
+,
+Fix Version/s:,None
+,
+Component/s:,None
+,
+Labels:,None
+,
+Estimated Complexity:,Unknown
+,
+description,Allow to hook in a custom enricher where you can add custom data from the current exchange to opentracing traces.E.g. put a process instance id from some process manager into opentracing baggages for correlation purposes.Also see CAMEL-12879 and https://stackoverflow.com/q/59428904/743507
+,
+Assignee:,Unassigned
+,
+Reporter:,DietrichSchulten
+,
+Votes:,0Voteforthisissue
+,
+Watchers:,1Startwatchingthisissue
+,
+Created:,21/Dec/1910:05
+,
+Updated:,28/Dec/1908:15
+,
+comments,"
+Hide
+
+
+Permalink
+
+
+ ASF GitHub Bot
+ added a comment  - 14/Dec/16 14:55 
+GitHub user bobpaulin opened a pull request:
+ https://github.com/apache/camel/pull/1348
+ CAMEL-10597 - Allow addition of x-className to empty VendorExtensions
+You can merge this pull request into a Git repository by running:
+    $ git pull https://github.com/bobpaulin/camel CAMEL-10597
+Alternatively you can review and apply these changes as the patch at:
+ https://github.com/apache/camel/pull/1348.patch
+To close this pull request, make a commit to your master/trunk branch
+with (at least) the following in the commit message:
+    This closes #1348
+
+ 
+Hide
+
+
+Permalink
+
+
+ Bob Paulin
+ added a comment  - 14/Dec/16 14:56 
+PR included https://github.com/apache/camel/pull/1348 
+Hide
+
+
+Permalink
+
+
+ Claus Ibsen
+ added a comment  - 14/Dec/16 15:31 
+Thanks for the PR 
+Hide
+
+
+Permalink
+
+
+ ASF GitHub Bot
+ added a comment  - 14/Dec/16 15:34 
+Github user bobpaulin closed the pull request at:
+ https://github.com/apache/camel/pull/1348 
+Hide
+
+
+Permalink
+
+
+ Andrea Cosentino
+ added a comment  - 15/Dec/16 14:05 
+2.17.x is affected too Claus Ibsen 
+Hide
+
+
+Permalink
+
+
+ Claus Ibsen
+ added a comment  - 15/Dec/16 14:26 
+Thanks its backported now "
+Type:,Task
+,
+Status:,Open
+,
+Priority:,Major
+,
+Resolution:,Unresolved
+,
+Affects Version/s:,None
+,
+Fix Version/s:,3.x
+,
+Component/s:,None
+,
+Labels:,None
+,
+Estimated Complexity:,Unknown
+,
+description,So camel-cdi does not have runtime dependency on camel-mock. That code with MockEndpoint should be moved to camel-test-cdi as its for testing purpose
+,
+Assignee:,Unassigned
+,
+Reporter:,ClausIbsen
+,
+Votes:,0Voteforthisissue
+,
+Watchers:,1Startwatchingthisissue
+,
+Created:,04/Sep/1910:00
+,
+Updated:,30/Sep/1906:42
+,
+comments,"
+Hide
+
+
+Permalink
+
+
+ ASF GitHub Bot
+ added a comment  - 14/Dec/16 14:55 
+GitHub user bobpaulin opened a pull request:
+ https://github.com/apache/camel/pull/1348
+ CAMEL-10597 - Allow addition of x-className to empty VendorExtensions
+You can merge this pull request into a Git repository by running:
+    $ git pull https://github.com/bobpaulin/camel CAMEL-10597
+Alternatively you can review and apply these changes as the patch at:
+ https://github.com/apache/camel/pull/1348.patch
+To close this pull request, make a commit to your master/trunk branch
+with (at least) the following in the commit message:
+    This closes #1348
+
+ 
+Hide
+
+
+Permalink
+
+
+ Bob Paulin
+ added a comment  - 14/Dec/16 14:56 
+PR included https://github.com/apache/camel/pull/1348 
+Hide
+
+
+Permalink
+
+
+ Claus Ibsen
+ added a comment  - 14/Dec/16 15:31 
+Thanks for the PR 
+Hide
+
+
+Permalink
+
+
+ ASF GitHub Bot
+ added a comment  - 14/Dec/16 15:34 
+Github user bobpaulin closed the pull request at:
+ https://github.com/apache/camel/pull/1348 
+Hide
+
+
+Permalink
+
+
+ Andrea Cosentino
+ added a comment  - 15/Dec/16 14:05 
+2.17.x is affected too Claus Ibsen 
+Hide
+
+
+Permalink
+
+
+ Claus Ibsen
+ added a comment  - 15/Dec/16 14:26 
+Thanks its backported now "
+Type:,Task
+,
+Status:,Open
+,
+Priority:,Major
+,
+Resolution:,Unresolved
+,
+Affects Version/s:,None
+,
+Fix Version/s:,None
+,
+Component/s:,None
+,
+Labels:,None
+,
+Estimated Complexity:,Unknown
+,
+description,"The menu on the left hand side has both EIPs form the book and patterns in the Camel DSL.It would be good to list the EIPs from the book, and then have a separator and then list all the patterns in the Camel routesToday its a bit mixed up
+https://camel.apache.org/manual/latest/enterprise-integration-patterns.html"
+,
+Assignee:,Unassigned
+,
+Reporter:,ClausIbsen
+,
+Votes:,0Voteforthisissue
+,
+Watchers:,1Startwatchingthisissue
+,
+Created:,10/Dec/1910:39
+,
+Updated:,10/Dec/1910:39
+,
+comments,"
+Hide
+
+
+Permalink
+
+
+ ASF GitHub Bot
+ added a comment  - 14/Dec/16 14:55 
+GitHub user bobpaulin opened a pull request:
+ https://github.com/apache/camel/pull/1348
+ CAMEL-10597 - Allow addition of x-className to empty VendorExtensions
+You can merge this pull request into a Git repository by running:
+    $ git pull https://github.com/bobpaulin/camel CAMEL-10597
+Alternatively you can review and apply these changes as the patch at:
+ https://github.com/apache/camel/pull/1348.patch
+To close this pull request, make a commit to your master/trunk branch
+with (at least) the following in the commit message:
+    This closes #1348
+
+ 
+Hide
+
+
+Permalink
+
+
+ Bob Paulin
+ added a comment  - 14/Dec/16 14:56 
+PR included https://github.com/apache/camel/pull/1348 
+Hide
+
+
+Permalink
+
+
+ Claus Ibsen
+ added a comment  - 14/Dec/16 15:31 
+Thanks for the PR 
+Hide
+
+
+Permalink
+
+
+ ASF GitHub Bot
+ added a comment  - 14/Dec/16 15:34 
+Github user bobpaulin closed the pull request at:
+ https://github.com/apache/camel/pull/1348 
+Hide
+
+
+Permalink
+
+
+ Andrea Cosentino
+ added a comment  - 15/Dec/16 14:05 
+2.17.x is affected too Claus Ibsen 
+Hide
+
+
+Permalink
+
+
+ Claus Ibsen
+ added a comment  - 15/Dec/16 14:26 
+Thanks its backported now "
+Type:,Improvement
+,
+Status:,Open
+,
+Priority:,Major
+,
+Resolution:,Unresolved
+,
+Affects Version/s:,None
+,
+Fix Version/s:,3.x
+,
+Component/s:,None
+,
+Labels:,None
+,
+Estimated Complexity:,Unknown
+,
+description,Like you can do in SB to setup advanced route startup where Camel can retry starting routes etc.
+,
+Assignee:,ClausIbsen
+,
+Reporter:,ClausIbsen
+,
+Votes:,0Voteforthisissue
+,
+Watchers:,2Startwatchingthisissue
+,
+Created:,16/May/1907:32
+,
+Updated:,30/Nov/1913:47
+,
+comments,"
+Hide
+
+
+Permalink
+
+
+ ASF GitHub Bot
+ added a comment  - 14/Dec/16 14:55 
+GitHub user bobpaulin opened a pull request:
+ https://github.com/apache/camel/pull/1348
+ CAMEL-10597 - Allow addition of x-className to empty VendorExtensions
+You can merge this pull request into a Git repository by running:
+    $ git pull https://github.com/bobpaulin/camel CAMEL-10597
+Alternatively you can review and apply these changes as the patch at:
+ https://github.com/apache/camel/pull/1348.patch
+To close this pull request, make a commit to your master/trunk branch
+with (at least) the following in the commit message:
+    This closes #1348
+
+ 
+Hide
+
+
+Permalink
+
+
+ Bob Paulin
+ added a comment  - 14/Dec/16 14:56 
+PR included https://github.com/apache/camel/pull/1348 
+Hide
+
+
+Permalink
+
+
+ Claus Ibsen
+ added a comment  - 14/Dec/16 15:31 
+Thanks for the PR 
+Hide
+
+
+Permalink
+
+
+ ASF GitHub Bot
+ added a comment  - 14/Dec/16 15:34 
+Github user bobpaulin closed the pull request at:
+ https://github.com/apache/camel/pull/1348 
+Hide
+
+
+Permalink
+
+
+ Andrea Cosentino
+ added a comment  - 15/Dec/16 14:05 
+2.17.x is affected too Claus Ibsen 
+Hide
+
+
+Permalink
+
+
+ Claus Ibsen
+ added a comment  - 15/Dec/16 14:26 
+Thanks its backported now "
+Type:,NewFeature
+,
+Status:,Open
+,
+Priority:,Major
+,
+Resolution:,Unresolved
+,
+Affects Version/s:,None
+,
+Fix Version/s:,3.x
+,
+Component/s:,camel-kubernetes
+,
+Labels:,None
+,
+Estimated Complexity:,Unknown
+,
+description,
+,
+Assignee:,AndreaCosentino
+,
+Reporter:,AndreaCosentino
+,
+Votes:,0Voteforthisissue
+,
+Watchers:,1Startwatchingthisissue
+,
+Created:,21/Sep/1909:50
+,
+Updated:,21/Nov/1919:55
+,
+comments,"
+Hide
+
+
+Permalink
+
+
+ ASF GitHub Bot
+ added a comment  - 14/Dec/16 14:55 
+GitHub user bobpaulin opened a pull request:
+ https://github.com/apache/camel/pull/1348
+ CAMEL-10597 - Allow addition of x-className to empty VendorExtensions
+You can merge this pull request into a Git repository by running:
+    $ git pull https://github.com/bobpaulin/camel CAMEL-10597
+Alternatively you can review and apply these changes as the patch at:
+ https://github.com/apache/camel/pull/1348.patch
+To close this pull request, make a commit to your master/trunk branch
+with (at least) the following in the commit message:
+    This closes #1348
+
+ 
+Hide
+
+
+Permalink
+
+
+ Bob Paulin
+ added a comment  - 14/Dec/16 14:56 
+PR included https://github.com/apache/camel/pull/1348 
+Hide
+
+
+Permalink
+
+
+ Claus Ibsen
+ added a comment  - 14/Dec/16 15:31 
+Thanks for the PR 
+Hide
+
+
+Permalink
+
+
+ ASF GitHub Bot
+ added a comment  - 14/Dec/16 15:34 
+Github user bobpaulin closed the pull request at:
+ https://github.com/apache/camel/pull/1348 
+Hide
+
+
+Permalink
+
+
+ Andrea Cosentino
+ added a comment  - 15/Dec/16 14:05 
+2.17.x is affected too Claus Ibsen 
+Hide
+
+
+Permalink
+
+
+ Claus Ibsen
+ added a comment  - 15/Dec/16 14:26 
+Thanks its backported now "
+Type:,NewFeature
+,
+Status:,Open
+,
+Priority:,Major
+,
+Resolution:,Unresolved
+,
+Affects Version/s:,None
+,
+Fix Version/s:,3.x
+,
+Component/s:,"camel-core,camel-jackson"
+,
+Labels:,None
+,
+Estimated Complexity:,Unknown
+,
+description,"Currently jackson for json is available as the generic <json> data format. We should @deprecated the <json> and let people use the specialized such as <xstream> or <jackson> so they chose the json engine of choice.Then we can offer jackson specific options to be configured, like we have for xstream.See nabble
+http://camel.465427.n5.nabble.com/Custom-Jackson-ObjectMapper-tp5060579p5060579.html"
+,
+Assignee:,Unassigned
+,
+Reporter:,ClausIbsen
+,
+Votes:,7Voteforthisissue
+,
+Watchers:,6Startwatchingthisissue
+,
+Created:,08/Feb/1209:07
+,
+Updated:,21/Nov/1919:54
+,
+comments,"
+Hide
+
+
+Permalink
+
+
+ ASF GitHub Bot
+ added a comment  - 14/Dec/16 14:55 
+GitHub user bobpaulin opened a pull request:
+ https://github.com/apache/camel/pull/1348
+ CAMEL-10597 - Allow addition of x-className to empty VendorExtensions
+You can merge this pull request into a Git repository by running:
+    $ git pull https://github.com/bobpaulin/camel CAMEL-10597
+Alternatively you can review and apply these changes as the patch at:
+ https://github.com/apache/camel/pull/1348.patch
+To close this pull request, make a commit to your master/trunk branch
+with (at least) the following in the commit message:
+    This closes #1348
+
+ 
+Hide
+
+
+Permalink
+
+
+ Bob Paulin
+ added a comment  - 14/Dec/16 14:56 
+PR included https://github.com/apache/camel/pull/1348 
+Hide
+
+
+Permalink
+
+
+ Claus Ibsen
+ added a comment  - 14/Dec/16 15:31 
+Thanks for the PR 
+Hide
+
+
+Permalink
+
+
+ ASF GitHub Bot
+ added a comment  - 14/Dec/16 15:34 
+Github user bobpaulin closed the pull request at:
+ https://github.com/apache/camel/pull/1348 
+Hide
+
+
+Permalink
+
+
+ Andrea Cosentino
+ added a comment  - 15/Dec/16 14:05 
+2.17.x is affected too Claus Ibsen 
+Hide
+
+
+Permalink
+
+
+ Claus Ibsen
+ added a comment  - 15/Dec/16 14:26 
+Thanks its backported now "
+Type:,Improvement
+,
+Status:,Open
+,
+Priority:,Major
+,
+Resolution:,Unresolved
+,
+Affects Version/s:,None
+,
+Fix Version/s:,3.x
+,
+Component/s:,None
+,
+Labels:,None
+,
+Estimated Complexity:,Unknown
+,
+description,"So you can configure resilience4j via its SB starter JAR, and then refer to the logical name of its SB, Bulkhead etc configuration and then Camel can use that."
+,
+Assignee:,Unassigned
+,
+Reporter:,ClausIbsen
+,
+Votes:,0Voteforthisissue
+,
+Watchers:,1Startwatchingthisissue
+,
+Created:,18/Nov/1918:18
+,
+Updated:,20/Nov/1920:15
+,
+comments,"
+Hide
+
+
+Permalink
+
+
+ ASF GitHub Bot
+ added a comment  - 14/Dec/16 14:55 
+GitHub user bobpaulin opened a pull request:
+ https://github.com/apache/camel/pull/1348
+ CAMEL-10597 - Allow addition of x-className to empty VendorExtensions
+You can merge this pull request into a Git repository by running:
+    $ git pull https://github.com/bobpaulin/camel CAMEL-10597
+Alternatively you can review and apply these changes as the patch at:
+ https://github.com/apache/camel/pull/1348.patch
+To close this pull request, make a commit to your master/trunk branch
+with (at least) the following in the commit message:
+    This closes #1348
+
+ 
+Hide
+
+
+Permalink
+
+
+ Bob Paulin
+ added a comment  - 14/Dec/16 14:56 
+PR included https://github.com/apache/camel/pull/1348 
+Hide
+
+
+Permalink
+
+
+ Claus Ibsen
+ added a comment  - 14/Dec/16 15:31 
+Thanks for the PR 
+Hide
+
+
+Permalink
+
+
+ ASF GitHub Bot
+ added a comment  - 14/Dec/16 15:34 
+Github user bobpaulin closed the pull request at:
+ https://github.com/apache/camel/pull/1348 
+Hide
+
+
+Permalink
+
+
+ Andrea Cosentino
+ added a comment  - 15/Dec/16 14:05 
+2.17.x is affected too Claus Ibsen 
+Hide
+
+
+Permalink
+
+
+ Claus Ibsen
+ added a comment  - 15/Dec/16 14:26 
+Thanks its backported now "
+Type:,Improvement
+,
+Status:,Open
+,
+Priority:,Major
+,
+Resolution:,Unresolved
+,
+Affects Version/s:,None
+,
+Fix Version/s:,3.x
+,
+Component/s:,None
+,
+Labels:,None
+,
+Estimated Complexity:,Unknown
+,
+description,"We should move logic that can be executed once during build/compile phase for components to doInit, and then leave doStart to when components need to setup live connections to remote systems etc.In doInit we can do internal init such as setup a thread pool or other stuff they need."
+,
+Assignee:,Unassigned
+,
+Reporter:,ClausIbsen
+,
+Votes:,0Voteforthisissue
+,
+Watchers:,1Startwatchingthisissue
+,
+Created:,12/May/1908:22
+,
+Updated:,04/Nov/1905:33
+,
+comments,"
+Hide
+
+
+Permalink
+
+
+ ASF GitHub Bot
+ added a comment  - 14/Dec/16 14:55 
+GitHub user bobpaulin opened a pull request:
+ https://github.com/apache/camel/pull/1348
+ CAMEL-10597 - Allow addition of x-className to empty VendorExtensions
+You can merge this pull request into a Git repository by running:
+    $ git pull https://github.com/bobpaulin/camel CAMEL-10597
+Alternatively you can review and apply these changes as the patch at:
+ https://github.com/apache/camel/pull/1348.patch
+To close this pull request, make a commit to your master/trunk branch
+with (at least) the following in the commit message:
+    This closes #1348
+
+ 
+Hide
+
+
+Permalink
+
+
+ Bob Paulin
+ added a comment  - 14/Dec/16 14:56 
+PR included https://github.com/apache/camel/pull/1348 
+Hide
+
+
+Permalink
+
+
+ Claus Ibsen
+ added a comment  - 14/Dec/16 15:31 
+Thanks for the PR 
+Hide
+
+
+Permalink
+
+
+ ASF GitHub Bot
+ added a comment  - 14/Dec/16 15:34 
+Github user bobpaulin closed the pull request at:
+ https://github.com/apache/camel/pull/1348 
+Hide
+
+
+Permalink
+
+
+ Andrea Cosentino
+ added a comment  - 15/Dec/16 14:05 
+2.17.x is affected too Claus Ibsen 
+Hide
+
+
+Permalink
+
+
+ Claus Ibsen
+ added a comment  - 15/Dec/16 14:26 
+Thanks its backported now "
+Type:,Task
+,
+Status:,Open
+,
+Priority:,Major
+,
+Resolution:,Unresolved
+,
+Affects Version/s:,3.0.0
+,
+Fix Version/s:,None
+,
+Component/s:,None
+,
+Labels:,None
+,
+Estimated Complexity:,Unknown
+,
+description,"The OpenTracing SpecialAgent includes support for the Apache Camel OpenTracing component. Since the release of Camel v3.0.0, the integration fails to install.For previous versions of Camel, the SpecialAgent has used the  `InstallOpenTracingTracerRuleTest` to assert that the Camel OpenTracing component works with SpecialAgent.Since the release of Camel v3.0.0, the `InstallOpenTracingTracerRuleTest` that is in Camel's GitHub has been marked with `@Ignore`. When I remove the `@Ignore` annotation, the test fails. I am not experienced with the Camel OpenTracing component to attempt to debug this issue.Currently, SpecialAgent integrates the Camel OpenTracing component for versions 2.24.0 to 2.24.2. Does the Apache Camel team desire integration of the Camel 3.0.0 OpenTracing component in SpecialAgent? "
+,
+Assignee:,Unassigned
+,
+Reporter:,SevaSafris
+,
+Votes:,0Voteforthisissue
+,
+Watchers:,3Startwatchingthisissue
+,
+Created:,17/Dec/1908:08
+,
+Updated:,17/Dec/1913:02
+,
+comments,"
+Hide
+
+
+Permalink
+
+
+ ASF GitHub Bot
+ added a comment  - 14/Dec/16 14:55 
+GitHub user bobpaulin opened a pull request:
+ https://github.com/apache/camel/pull/1348
+ CAMEL-10597 - Allow addition of x-className to empty VendorExtensions
+You can merge this pull request into a Git repository by running:
+    $ git pull https://github.com/bobpaulin/camel CAMEL-10597
+Alternatively you can review and apply these changes as the patch at:
+ https://github.com/apache/camel/pull/1348.patch
+To close this pull request, make a commit to your master/trunk branch
+with (at least) the following in the commit message:
+    This closes #1348
+
+ 
+Hide
+
+
+Permalink
+
+
+ Bob Paulin
+ added a comment  - 14/Dec/16 14:56 
+PR included https://github.com/apache/camel/pull/1348 
+Hide
+
+
+Permalink
+
+
+ Claus Ibsen
+ added a comment  - 14/Dec/16 15:31 
+Thanks for the PR 
+Hide
+
+
+Permalink
+
+
+ ASF GitHub Bot
+ added a comment  - 14/Dec/16 15:34 
+Github user bobpaulin closed the pull request at:
+ https://github.com/apache/camel/pull/1348 
+Hide
+
+
+Permalink
+
+
+ Andrea Cosentino
+ added a comment  - 15/Dec/16 14:05 
+2.17.x is affected too Claus Ibsen 
+Hide
+
+
+Permalink
+
+
+ Claus Ibsen
+ added a comment  - 15/Dec/16 14:26 
+Thanks its backported now "
